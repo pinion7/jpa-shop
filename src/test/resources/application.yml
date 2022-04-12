@@ -1,0 +1,19 @@
+spring: #허나 그냥 생략하고 주소라던가 뭐 아무것도 안넣어도, test resource만 만들어주면 스프링이 그냥 인메모리 방식으로 돌려줌 ㄷㄷ
+#  datasource:
+#    url: jdbc:h2:mem:test #인메모리로 방식으로 테스트 하는것!
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop # 애플리케이션 실행시점에 일단 내가가진 엔티티를 다 지우고, 다시 생성하는 create 기능에 + drop 기능(마지막에 다 drop까지해줌)
+#    properties:
+#      hibernate:
+#        show_sql: true # 이건 sout에 출력하는 것 (상용환경에서는 쓰면 안됨)
+#        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug # 이건 logger로 출력하는 것 (상용환경에서 써도 되는 것)
+#    org.hibernate.type: trace
