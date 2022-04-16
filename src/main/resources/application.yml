@@ -1,4 +1,8 @@
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/jpashop
     username: sa
@@ -12,6 +16,12 @@ spring:
       hibernate:
         show_sql: true # 이건 sout에 출력하는 것 (상용환경에서는 쓰면 안됨)
         format_sql: true
+
+editor:
+  soft:
+    wrap:
+      force:
+        limit=100000:
 
 logging:
   level:

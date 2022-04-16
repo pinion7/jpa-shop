@@ -1,7 +1,7 @@
 package jpabook.jpashop.service;
 
-import jpabook.jpashop.DeliveryStatus;
-import jpabook.jpashop.OrderStatus;
+import jpabook.jpashop.domain.DeliveryStatus;
+import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;

@@ -18,7 +18,9 @@ public class ItemRepository {
         if (item.getId() == null) {
             em.persist(item);
         } else {
-            em.merge(item); // 그렇지 않으면 merge를 사용. 업데이트와 비슷하다고 보면 됨.
+            // 그렇지 않으면 merge를 사용. 업데이트와 비슷하다고 보면 됨.
+            // 근데 준영속상태를 전부 업데이트 적용하는 건데, 문제는 선택적 적용이 불가해서 값이 없는 건 null로 업데이트해서 위험 (그래서 실무에선 활용 안하게됨)
+            em.merge(item);
         }
     }
 
