@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create # 애플리케이션 실행시점에 일단 내가가진 엔티티를 다 지우고, 다시 생성하는 auto 기능
+      ddl-auto: none # 애플리케이션 실행시점에 일단 내가가진 엔티티를 다 지우고, 다시 생성하는 auto 기능 (만약 none으로 두면 데이터 새로고침 안함!)
     properties:
       hibernate:
         show_sql: true # 이건 sout에 출력하는 것 (상용환경에서는 쓰면 안됨)
