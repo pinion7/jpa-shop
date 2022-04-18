@@ -26,6 +26,7 @@ public class Member {
 
     // 연관관계의 주인이 아닌 곳에 mappedBy를 넣어주고, 값으론 연관관계주인 테이블에서 ManyToOne으로 사용하고 있는 Member타입의 변수명을 넣어줌
     // mappedBy를 넣는 순간 스스로가 매핑 주체가 되는 게 아니고, Many쪽 엔티티의 필드에 의해 매핑되는 거울일 뿐이게 되는 것!
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
     /* 컬렉션은 굳이 생성자에서 초기화하지말고 이렇게 필드에서 바로 초기화하자! 그게 효율적!

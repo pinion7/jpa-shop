@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpashop.domain.Category;
 import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.excption.NotEnoughStockException;
@@ -29,6 +30,7 @@ public abstract class Item {
     @ManyToMany(mappedBy = "items") // ManyToMany는 fetch default가 Lazy
     private List<Category> categories = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "item")
     private List<OrderItem> orderItems = new ArrayList<>();
 

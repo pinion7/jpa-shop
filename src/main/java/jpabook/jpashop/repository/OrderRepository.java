@@ -132,4 +132,14 @@ public class OrderRepository {
         }
         return query.getResultList();
     }
+
+    // fetch 조인!
+    // order를 조회하는데, order를 기준으로 member랑 delivery를 다같이 조인한 다음에 아예 select 절에 이걸 다 넣고 한번에 다 땡겨오는 개념!
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
 }
