@@ -1,19 +1,18 @@
 package jpabook.jpashop;
 
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.repository.MemberRepository;
+import jpabook.jpashop.repository.MemberRepositoryOld;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class MemberRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository; // Di 주입
+    MemberRepositoryOld memberRepository; // Di 주입
 
     @Test
     @Transactional // 이게 있어야 테스트가 가능함. jpa는 반드시 트랜잭션과 함께해야하므로. (단, 테스트에 저 어노테이션이 있으면 테스트가 끝나고 다 롤백이됨: 즉 db에 변화는 없음!)
