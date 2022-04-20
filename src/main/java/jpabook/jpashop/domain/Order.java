@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
+//@BatchSize(size = 100) // toOne으로 끝나는 관계가 설정된 필드는 여기에 size를 설정해줘야 함 (근데 걍 글로벌 써;;)
 @Entity
 @Table(name = "orders")
 @Getter @Setter
@@ -29,6 +31,7 @@ public class Order {
     private Member member;
 
     // 반면 OneToMany는 fetch default가 lazy라 추가 설정이 필요없음
+//    @BatchSize(size = 100) // 이런식으로 개별 in 쿼리 사이즈를 설정할 수 있음 (단, 이건 일대다 컬렉션 기준 설정 방식)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // 가령 여기에 cascade를 넣어두면 order만 persist로 작업해줘도 연관된 orderItem도 같이 바꿔줌
     private List<OrderItem> orderItems = new ArrayList<>();
 

@@ -142,4 +142,33 @@ public class OrderRepository {
                         " join fetch o.delivery d", Order.class
         ).getResultList();
     }
+
+    // 일대다 컬렉션 데이터를 페치 조인하여 조회 하는 케이스!
+    // 중요한 키워드는 distinct!
+    // jpa에서 이 키워드를 넣으면 두가지 기능을 해줌
+    // 1. db에 distinct가 붙은 쿼리를 날려줌 (하지만 이것만으로는 fetch 조인 되었을 때 완전히 동일한 레코드가 아니면 중복으로 인정을 못해줌)
+    // 2. from 뒤에 오는 엔티티가 중복인 경우에, 그 중복을 걸러서 하나만 컬렉션에 담아줌! (이 2번째 기능 덕에 실제 중복되지 않은 데이터로 필터가 성공!)
+    // -> 하지만 치명적인 단점: 페이징이 불가능!!!!! 앙대~~~~~~~~~~~~~~~~~~
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+
+    }
+
+    // 일단 일대다를 빼고 페치 조인 및 페이징 적용!
+    // service로직 돌아가서 루프 돌면서 일대다 컬렉션에 해당하는 데이터도 초기화로 끌어오되, yml 파일에 in query 사이즈를 크게 줘서 쿼리를 최소화!
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }
