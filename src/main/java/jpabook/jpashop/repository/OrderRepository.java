@@ -1,6 +1,8 @@
 package jpabook.jpashop.repository;
 
-import jpabook.jpashop.domain.Member;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,11 +14,19 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jpabook.jpashop.domain.QMember.*;
+import static jpabook.jpashop.domain.QOrder.*;
+
 @Repository
-@RequiredArgsConstructor
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory query;
+
+    public OrderRepository(EntityManager em) {
+        this.em = em;
+        this.query = new JPAQueryFactory(em);
+    }
 
     public void save(Order order) {
         em.persist(order);
@@ -30,40 +40,44 @@ public class OrderRepository {
      * 1. QueryDSL 방식 - 실무에서는 동적쿼리로 이걸 써야함. (추후 추가 예정)
      */
     public List<Order> findAll(OrderSearch orderSearch) {
-        return em.createQuery("select o from Order o join o.member m" +
-                        " where o.status = :status" +
-                        " and m.name like :name", Order.class)
-                .setParameter("status", orderSearch.getOrderStatus())
-                .setParameter("name", orderSearch.getMemberName())
-//                .setFirstResult(100) // 100번째부터 가져오겠다 (페이징 방법)
-                .setMaxResults(1000) // 데이터를 최대 1000개까지만 가져오겠다 (위에꺼랑 연동하면 100번째부터 시작해서 1000개 가져오겠다는 것)
-                .getResultList();
+//        return em.createQuery("select o from Order o join o.member m" +
+//                        " where o.status = :status" +
+//                        " and m.name like :name", Order.class)
+//                .setParameter("status", orderSearch.getOrderStatus())
+//                .setParameter("name", orderSearch.getMemberName())
+////                .setFirstResult(100) // 100번째부터 가져오겠다 (페이징 방법)
+//                .setMaxResults(1000) // 데이터를 최대 1000개까지만 가져오겠다 (위에꺼랑 연동하면 100번째부터 시작해서 1000개 가져오겠다는 것)
+//                .getResultList();
 
+        // 생성자로 주입받으면 아래 코드 생략가능
+//        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        // static import로 전환하면 아래 코드도 주석처리 가능
 //        QOrder order = QOrder.order;
 //        QMember member = QMember.member;
-//
-//        return query
-//                .select(order)
-//                .from(order)
-//                .join(order.member, member)
-//                .where(statusEq(orderSearch.getOrderStatus()),
-//                        nameLike(orderSearch.getMemberName()))
-//                .limit(1000)
-//                .fetch();
+
+        return query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+                .limit(1000)
+                .fetch();
     }
 
-//    private BooleanExpression statusEq(OrderStatus statusCond) {
-//        if (statusCond == null) {
-//            return null;
-//        }
-//        return order.status.eq(statusCond);
-//    }
-//
-//    private BooleanExpression nameLike(String nameCond) {
-//        if (!StringUtils.hasText(nameCond)) {
-//            return null;
-//        }
-//    }
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if (statusCond == null) {
+            return null;
+        }
+        return order.status.eq(statusCond);
+    }
+
+    private BooleanExpression nameLike(String nameCond) {
+        if (!StringUtils.hasText(nameCond)) {
+            return null;
+        }
+        return member.name.like(nameCond);
+    }
 
 
     /**

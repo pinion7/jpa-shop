@@ -63,6 +63,11 @@ public class OrderService {
      * 주문 검색
      */
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAllByString(orderSearch);
+
+        // 스트링 합치기 방식 주석처리
+//        return orderRepository.findAllByString(orderSearch);
+
+        // queryDsl 방식 적용!
+        return orderRepository.findAll(orderSearch);
     }
 }
